@@ -18,7 +18,7 @@
 		echo getData($q);
 	}
 
-	if($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['id'])) {
+	if($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['u_id'])) {
 		$first_name = htmlspecialchars(trim($_POST["first_name"]));
 		$last_name = htmlspecialchars(trim($_POST["last_name"]));
 		$email = htmlspecialchars(trim($_POST["email"]));
@@ -40,11 +40,11 @@
 	}
 
 	if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['u_id'])) {
-		$u_id = $_POST["u_id"];
-		$u_first_name = $_POST["u_first_name"];
-		$u_last_name = $_POST["u_last_name"];
-		$u_email = $_POST["u_email"];
-		$u_gender = $_POST["u_gender"];
+		$u_id = htmlspecialchars(trim($_POST["u_id"]));
+		$u_first_name = htmlspecialchars(trim($_POST["u_first_name"]));
+		$u_last_name = htmlspecialchars(trim($_POST["u_last_name"]));
+		$u_email = htmlspecialchars(trim($_POST["u_email"]));
+		$u_gender = htmlspecialchars(trim($_POST["u_gender"]));
 		$u_ip_address = $_POST["u_ip_address"];
 		echo updateData($u_id,$u_first_name,$u_last_name,$u_email,$u_gender,$u_ip_address);
 	}
@@ -94,24 +94,18 @@
 
 	function updateData($uid,$fname,$lname,$e,$g,$ip){
 		global $con;
-		echo $uid;
-		echo $fname;
-		echo $lname;
-		echo $e;
-		echo $g;
-		echo $ip;
 
-//		if(!empty($uid) && !empty($fname) && !empty($lname) && !empty($e) && !empty($g) && !empty($ip)){
-//			$sql = "UPDATE mock_data SET first_name='$fname' last_name='$lname' email='$e' gender='$g' ip_address='$ip' WHERE id='$uid'";
-//		}else{
-//			die("No empty data allowed");
-//		}
-//		$result = mysqli_query($con,$sql);
-//		if($result == 1){
-//			echo "Data Updated"."</br>";
-//		}else{
-//			echo "Error occurred: ".mysqli_error($con)."</br>";
-//		}
+		if(!empty($uid) && !empty($fname) && !empty($lname) && !empty($e) && !empty($g) && !empty($ip)){
+			$sql = "UPDATE `mock_data` SET `first_name` = '$fname', `last_name` = '$lname', `email` = '$e', `gender` = '$g', `ip_address` = '$ip' WHERE `mock_data`.`id` = $uid ";
+		}else{
+			die("No empty data allowed");
+		}
+		$result = mysqli_query($con,$sql);
+		if($result == 1){
+			echo "Data Updated"."</br>";
+		}else{
+			echo "Error occurred: ".mysqli_error($con)."</br>";
+		}
 	}
 
 	function delData($key){
